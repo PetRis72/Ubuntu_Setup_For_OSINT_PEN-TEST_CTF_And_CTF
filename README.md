@@ -37,16 +37,16 @@ A wide array of tools are installed, categorized by use case:
 
 1. **Clone the repository:**
    ```bash
-   git clone [https://github.com/YOUR-USERNAME/YOUR-REPO-NAME.git](https://github.com/YOUR-USERNAME/YOUR-REPO-NAME.git)
-   cd YOUR-REPO-NAME
+   git clone https://github.com/PetRis72/Ubuntu_Setup_For_OSINT_PEN-TEST_CTF_And_CTF.git
+   cd Ubuntu_Setup_For_OSINT_PEN-TEST_CTF_And_CTF
 
 2. **Make the script executable:**
    ```bash
-   chmod +x setup.sh
+   chmod +x SetUp_ubuntu.sh
 
 4. **Run as root/sudo:**
    ```bash
-   sudo ./setup.sh
+   sudo ./SetUp_ubuntu.sh
 
 6. ***Finalize:*** Reboot your system or log out and back in for the shell changes and group permissions to take effect.
 
