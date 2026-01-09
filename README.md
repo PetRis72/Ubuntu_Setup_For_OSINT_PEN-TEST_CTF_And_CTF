@@ -40,12 +40,14 @@ A wide array of tools are installed, categorized by use case:
    cd YOUR-REPO-NAME
 
 2. **Make the script executable:**
+   ```bash
    chmod +x setup.sh
 
-3. **Run as root/sudo:**
+4. **Run as root/sudo:**
+   ```bash
    sudo ./setup.sh
 
-4. ***Finalize:*** Reboot your system or log out and back in for the shell changes and group permissions to take effect.
+6. ***Finalize:*** Reboot your system or log out and back in for the shell changes and group permissions to take effect.
 
 ---
 
