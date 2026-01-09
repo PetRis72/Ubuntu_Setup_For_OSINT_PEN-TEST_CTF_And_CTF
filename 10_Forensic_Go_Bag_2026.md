@@ -33,7 +33,7 @@ You cannot investigate what you cannot connect to safely.
 ---
 
 ## 📸 4. Documentation & Physical Tools
-* **Camera:** 4K Mirrorless or high-end smartphone with EXIF-tagging for the [Seizure Photography Checklist](./Seizure_Photography_Checklist.md).
+* **Camera:** 4K Mirrorless or high-end smartphone with EXIF-tagging for the [Seizure Photography Checklist](./09_Seizure_Photography_Checklist.md).
 * **Faraday Bags:** Various sizes to block cellular/Wi-Fi signals for mobile phones and tablets.
 * **Tamper-Evident Supplies:** * Forensic Tape (Red/Void).
     * Numbered Tamper-Evident Bags (Anti-Static).
