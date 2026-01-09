@@ -54,8 +54,4 @@ Modern logs are useless if the computer's BIOS clock is drifting.
 * **Moving the Mouse:** In many 2026 security suites, moving the mouse triggers a "Lock on Disturbance" script. **Photograph the mouse, do not touch it.**
 * **Reflections:** Be careful not to capture your own reflection in the monitor, as this can obscure details or be used to challenge your "neutral" presence.
 
----
 
-### **Next Step: Document Integration**
-Add the link to this file in your main **README.md**:
-`* [Seizure Photography Checklist](./Seizure_Photography_Checklist.md)`
