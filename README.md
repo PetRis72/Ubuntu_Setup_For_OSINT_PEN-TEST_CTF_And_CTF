@@ -33,19 +33,19 @@ The 2026 update introduces **Zero-Trust Evidence Handling**, **Cloud Forensics**
 
 1. **Clone the repository:**
    ```bash
-   git clone [https://github.com/PetRis72/Ubuntu_Setup_For_OSINT_PEN-TEST_CTF_And_CTF.git](https://github.com/PetRis72/Ubuntu_Setup_For_OSINT_PEN-TEST_CTF_And_CTF.git)
+   git clone [https://github.com/PetRis72/Ubuntu_Setup_For_OSINT_PEN-TEST_CTF_And_CTF.git](https://github.com/PetRis72/Ubuntu_Setup_For_OSINT_PEN-   TEST_CTF_And_CTF.git)
    cd Ubuntu_Setup_For_OSINT_PEN-TEST_CTF_And_CTF
- ```
+   ```
 
 2. **Make the script executable:**
    ```bash
    chmod +x SetUp_ubuntu.sh
- ```
+   ```
 
 4. **Run as root/sudo:**
    ```bash
    sudo ./SetUp_ubuntu.sh
- ```
+   ```
 
 6. ***Finalize:*** Reboot your system or log out and back in for the shell changes and group permissions to take effect.
 
