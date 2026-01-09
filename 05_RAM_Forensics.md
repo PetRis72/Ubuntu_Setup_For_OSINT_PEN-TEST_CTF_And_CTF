@@ -48,18 +48,19 @@ Once you have the `.raw` dump on your USB, plug it into your Ubuntu machine. We 
 **Identify the Operating System:**
 ```bash
 vol -f /path/to/mem_dump.raw windows.info
-
+```
 **List Running Processes: Find out what was running (hidden malware often hides here):**
 ```bash
 vol -f /path/to/mem_dump.raw windows.pslist
-
+```
 **View Network Connections: See active TCP/UDP connections:**
 ```bash
 vol -f /path/to/mem_dump.raw windows.netstat
-
+```
 **Dump Password Hashes: Recover NTLM hashes from memory:**
 ```bash
-Dump Password Hashes: Recover NTLM hashes from memory:
+vol -f /path/to/mem_dump.raw windows.hashdump
+```
 
 ---
 
