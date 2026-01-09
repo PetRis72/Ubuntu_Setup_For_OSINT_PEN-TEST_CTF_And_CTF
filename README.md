@@ -33,7 +33,7 @@ The 2026 update introduces **Zero-Trust Evidence Handling**, **Cloud Forensics**
 
 1. **Clone the repository:**
    ```bash
-   git clone [https://github.com/PetRis72/Ubuntu_Setup_For_OSINT_PEN-TEST_CTF_And_CTF.git](https://github.com/PetRis72/Ubuntu_Setup_For_OSINT_PEN-   TEST_CTF_And_CTF.git)
+   git clone [https://github.com/PetRis72/Ubuntu_Setup_For_OSINT_PEN-TEST_CTF_And_CTF.git](https://github.com/PetRis72/Ubuntu_Setup_For_OSINT_PEN-TEST_CTF_And_CTF.git)
    cd Ubuntu_Setup_For_OSINT_PEN-TEST_CTF_And_CTF
    ```
 
