@@ -11,7 +11,7 @@ It streamlines system security, installs essential industry tools, and configure
 ### 1. System Hardening & Security
 * **System Updates:** Runs a full `apt update` and `upgrade`.
 * **Firewall:** Configures `UFW` to deny all incoming traffic by default.
-* **Proactive Defense:** Installs and enables `fail2ban`, `ClamAV` (antivirus), `rkhunter`, and `chkrootkit`.
+* **Proactive Defense:** Installs and enables `fail2ban`, `ClamAV` (antivirus), `rkhunter`, `chkrootkit`, and `AIDE` (File Integrity Monitoring).
 * **Auditing:** Installs `Lynis` for comprehensive system security auditing.
 
 ### 2. Security & OSINT Toolkit
@@ -19,14 +19,15 @@ A wide array of tools are installed, categorized by use case:
 * **Network Analysis:** `nmap`, `wireshark`, `tcpdump`, `net-tools`.
 * **Web & DB Hacking:** `sqlmap`, `gobuster`, `nikto`.
 * **Exploitation & Cracking:** `metasploit-framework`, `john`, `hashcat`, `hydra`.
-* **OSINT:** `theharvester`, `recon-ng`, `sublist3r`, `maltego`, `whois`.
-* **CTF & Forensics:** `binwalk`, `steghide`, `exiftool`, `pwntools`, `gdb`.
-* **IDS/IPS:** `snort`, `suricata`.
+* **Advanced OSINT & Recon:** `theharvester`, `recon-ng`, `sublist3r`, `maltego`, `sherlock`, `amass`, `spiderfoot`.
+* **Vulnerability Scanning:** `trivy`.
+* **CTF & Reverse Engineering:** `binwalk`, `steghide`, `exiftool`, `pwntools`, `gdb`, `ghidra`, `radare2`.
+* **Privacy & Anonymity:** `tor`, `proxychains4`.
 
-### 3. Terminal Enhancement
-* Installs `zsh` and Powerline fonts.
-* Automatically sets up **Oh My Zsh**.
-* Configures the terminal to use the **Kali Linux theme** for an optimized CLI experience.
+### 3. Terminal & Quality of Life
+* **Modern CLI Tools:** `bat` (with syntax highlighting), `htop`/`btop`, `tldr`, `fzf`.
+* **Shell:** Installs `zsh` and Powerline fonts.
+* **Theme:** Automatically sets up **Oh My Zsh** with the **Kali Linux theme**.
 
 ---
 
