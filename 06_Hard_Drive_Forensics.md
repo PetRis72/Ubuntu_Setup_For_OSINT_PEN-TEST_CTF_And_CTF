@@ -1,15 +1,17 @@
-# 💾 Hard Drive Forensics: Acquisition & Analysis
+# 💾 Hard Drive Forensics: Acquisition & Analysis (High Capacity)
 
-This guide covers the professional process of seizing, imaging, and analyzing physical storage media (HDD, SSD, NVMe, and USB drives).
+This guide covers the professional process of seizing, imaging, and analyzing storage media, ranging from small USB drives to multi-terabyte (TB) HDD/SSD arrays.
 
 ---
 
-## 🏗️ Phase 1: Physical Seizure & Connection
+## 🏗️ Phase 1: Physical Seizure & Hardware
 
-### **The Hardware Write Blocker**
-Before connecting a suspect's drive to your workstation, you **must** use a hardware write blocker (e.g., Tableau, WiebeTech).
-* **Why:** Operating systems (Linux/Windows) automatically attempt to mount drives, which updates "Last Accessed" timestamps and writes system metadata (like `System Volume Information`).
-* **The Goal:** Zero bits should be written to the source media.
+When dealing with modern hard drives, data volume is the biggest challenge. A single drive can now reach 20TB+.
+
+### **The Forensic Toolkit**
+* **Write Blocker:** (Mandatory) Hardware like **Tableau** or **WiebeTech** to prevent metadata alteration.
+* **Destination Storage:** Use external drives (8TB+) formatted as **exFAT** or **NTFS**. **Avoid FAT32** (4GB file limit).
+* **UPS (Power):** For drives >1TB, use an Uninterruptible Power Supply. Imaging can take 24+ hours; a power flicker will ruin the process.
 
 
 
@@ -17,56 +19,73 @@ Before connecting a suspect's drive to your workstation, you **must** use a hard
 
 ## 💿 Phase 2: Forensic Imaging (Guymager)
 
-We create a bit-by-bit copy of the drive. The industry standard format is **.E01** (Expert Witness Format) because it supports compression, internal metadata, and hash storage.
+For large drives, we use the **.E01 (Expert Witness Format)**. Unlike raw `.dd` files, `.E01` compresses data and skips empty blocks, saving massive amounts of space.
 
-### **The Process**
-1.  **Launch:** Open your terminal and type `sudo guymager`.
-2.  **Identify:** Find your source drive (check the serial number and size to be 100% sure).
-3.  **Acquire:** Right-click the drive -> **Acquire Image**.
-4.  **Settings:**
+### **The Process for Large Media**
+1.  **Launch:** `sudo guymager`.
+2.  **Acquire Image:** Right-click the source drive.
+3.  **Settings for TB+ Drives:**
     * **Format:** Linux Expert Witness Format (.E01).
-    * **Destination:** An external "Evidence" drive (formatted as exFAT or NTFS).
-    * **Hashing:** Check both **MD5** and **SHA-256**.
-5.  **Info File:** Guymager generates a `.info` file containing the acquisition time, hardware details, and the final hash. **Store this file with your Chain of Custody.**
+    * **Compression:** Set to "Fast" or "Best". This can reduce a 1TB drive (with 200GB data) down to a ~180GB file.
+    * **Split Files:** Set to **2048 MiB** or **4096 MiB**. Splitting makes it easier to move the evidence between drives or upload it to servers.
+4.  **Hashing:** Always verify with **SHA-256**.
 
-### **Hard Drive Checklist**
 
-| Step | Action | Tool |
-| :--- | :--- | :--- |
-| **1** | Photograph drive and label with Item ID | Camera / Label Maker |
-| **2** | Connect via Hardware Write Blocker | Tableau / WiebeTech |
-| **3** | Create `.E01` Forensic Image | `guymager` |
-| **4** | Verify Image Hash matches Source Hash | `sha256sum` |
-| **5** | Perform automated analysis | `autopsy` |
-| **6** | Manual file recovery (Carving) | `foremost` / `scalpel` |
 
 ---
 
-## 🔍 Phase 3: Command Line Analysis (The Sleuth Kit)
+## 🔍 Phase 3: Triage vs. Full Imaging
 
-Once you have your `.E01` file, you can analyze it on your workstation without the physical drive.
+If a drive is too large (e.g., a 60TB RAID array) and time is limited, use **Forensic Triage**:
 
-### **1. List Partitions**
-Find the starting offset of the partitions within the image:
+| Method | Target | Tool |
+| :--- | :--- | :--- |
+| **Full Image** | Every single bit (including deleted space) | `guymager` |
+| **Logical Image** | Only existing files/folders | `mount -r` & `rsync` |
+| **Targeted Triage** | Registry, $MFT, Logs, User Profile | `KAPE` or custom scripts |
+
+---
+
+## 🔬 Phase 4: Analysis with The Sleuth Kit (TSK)
+
+Analyze the `.E01` image on your Ubuntu workstation.
+
+### **1. Inspecting Partitions**
+Large drives often use GPT partitions. Identify them with:
 ```bash
 mmls evidence_image.E01
 ```
-### **2. List Files (including deleted)**
-Use the offset found in the previous step (replace `START_SECTOR` with the actual number):
+### **2. Deep File Analysis**
+If you need to find files by type (e.g., all JPGs) even if they were deleted:
+```bash
+# Using foremost to 'carve' files from the image
+foremost -i evidence_image.E01 -o /path/to/output
+```
+
+### **3. Mounting for Rapid Review**
+You can mount an `.E01` file as a read-only device to browse it like a normal folder:
+```bash
+ewfmount evidence_image.E01 /mnt/ewf
+mount -o loop,ro,show_sys_files /mnt/ewf/ewf1 /mnt/analysis
+```
+
+### **4. List Files (including deleted)**
+Use the offset found in the previous step (replace START_SECTOR with the actual number):
 ```bash
 # -r is recursive, -o is the offset
 fls -r -o START_SECTOR evidence_image.E01
 ```
-Note: Files marked with * are deleted but still exist in unallocated space.
+Note: Files marked with `*` are deleted but still exist in unallocated space.
 
-### **3. Recover a Specific File**
+**Recover a Specific File**
 Extract a file using its inode number:
 ```bash
 icat -o START_SECTOR evidence_image.E01 <inode_number> > recovered_file.jpg
 ```
+
 ---
 
-## 🖥️ Phase 4: Graphical Analysis (Autopsy)
+## 🖥️ Phase 5: Graphical Analysis (Autopsy)
 Autopsy is the most powerful tool for deep analysis and reporting.
 
 1. **Start Autopsy:** Type `autopsy` in the terminal.
@@ -77,6 +96,18 @@ Autopsy is the most powerful tool for deep analysis and reporting.
    * **Keyword Search:** Search the entire drive for strings like "password" or "confidential".
    * **Exif Parser:** Pulls GPS and camera metadata from image files.
    * **Encryption Detection:** Identifies BitLocker, FileVault, or VeraCrypt volumes.
+---
+
+### 📋 Hard Drive Checklist (High Capacity)
+
+| Step | Action | Tool / Requirement |
+| :--- | :--- | :--- |
+| **1** | Verify Destination Space (2x Source Size) | `df -h` |
+| **2** | Connect via Hardware Write Blocker | USB 3.0 or Thunderbolt |
+| **3** | Start `.E01` Imaging with Compression | `guymager` |
+| **4** | Store `.info` file with SHA-256 Hash | Documentation |
+| **5** | Run Autopsy Ingest (Overnight for TB+) | `autopsy` |
+| **6** | Update Tracking Log | [Chain of Custody](./Chain_of_Custody.md) |
 
 ---
 
