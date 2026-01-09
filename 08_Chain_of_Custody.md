@@ -117,14 +117,12 @@ This version includes the **Audit ID** and **Seal Status** columns, which are no
 ---
 
 ### 📝 Added Security Checklist
-Add this to your `Chain_of_Custody.md` to ensure the "Zero-Trust" model is followed:
+Ensure the "Zero-Trust" model is followed:
 
 * [ ] **Camera Check:** Did I photograph the system clock of the suspect machine compared to my "atomic clock" (phone)?
 * [ ] **Firmware Check:** Did I check for "Mouse Jigglers" or "Rubber Duckies" in hidden ports?
 * [ ] **Notarization:** Has the master hash been uploaded to a time-stamped log or witness-signed ledger?
 * [ ] **Read-Only:** Is the evidence file currently marked as `immutable`? (`sudo chattr +i evidence.e01`)
-
-**Would you like me to create the "Seizure Photography Checklist"?** This lists the exact 10 photos you must take at a scene to prove the environment wasn't tampered with before you started.
 
 ---
 
