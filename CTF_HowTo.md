@@ -64,6 +64,7 @@ target.sendline(b'A' * 32 + p64(0xdeadbeef))
 
 # Drop to interactive shell
 target.interactive()
+```
 
 ## 🛡 Vulnerability Research
 **Trivy**
