@@ -67,6 +67,7 @@ chsh -s /usr/bin/zsh "$TARGET_USER"
 # Guymager: Media acquisition/imaging (GUI-based)
 # Hashdeep: For calculating hashes (MD5/SHA256) of entire directories
 apt install -y autopsy guymager hashdeep sleuthkit
+apt install -y volatility3
 
 printf '\nSetup complete. Please reboot or log out and back in for changes to take effect.\n'
 
