@@ -47,19 +47,19 @@ Once you have the `.raw` dump on your USB, plug it into your Ubuntu machine. We 
 
 **Identify the Operating System:**
 ```bash
-vol -f /path/to/mem_dump.raw windows.info ```
+vol -f /path/to/mem_dump.raw windows.info
 
 **List Running Processes: Find out what was running (hidden malware often hides here):**
 ```bash
-vol -f /path/to/mem_dump.raw windows.pslist ```
+vol -f /path/to/mem_dump.raw windows.pslist
 
 **View Network Connections: See active TCP/UDP connections:**
 ```bash
-vol -f /path/to/mem_dump.raw windows.netstat ```
+vol -f /path/to/mem_dump.raw windows.netstat
 
 **Dump Password Hashes: Recover NTLM hashes from memory:**
 ```bash
-Dump Password Hashes: Recover NTLM hashes from memory: ```
+Dump Password Hashes: Recover NTLM hashes from memory:
 
 ---
 
@@ -85,11 +85,11 @@ To maintain the "Digital Chain of Custody," you must verify that the evidence fi
 
 1. **Create the Initial Hash:** Run this as soon as the acquisition (RAM or Disk) is finished.
 ```bash
-sha256sum evidence_dump.raw > evidence_dump.raw.sha256 ```
+sha256sum evidence_dump.raw > evidence_dump.raw.sha256
 
 2. **Verify the Hash Before Every Analysis Session:** Before you open the file in Autopsy or Volatility, verify its integrity.
 ```bash
-sha256sum -c evidence_dump.raw.sha256 ```
+sha256sum -c evidence_dump.raw.sha256 
 If the output is `OK`, the evidence is intact. If it fails, the evidence is "contaminated" and no longer reliable.
 
 ---
