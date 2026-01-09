@@ -1,55 +1,79 @@
-## 📑 Chain of Custody (CoC) Guide & Template
-The Chain of Custody is the most critical part of digital forensics. It is a chronological written record of those who have had custody of the evidence from the moment it is collected until it is presented in a legal or administrative proceeding.
+# 📑 Universal Chain of Custody (CoC) Guide & Template
 
-**🛡️ The Golden Rules of CoC **
-1. **Never Work on Original Media:** Always create a bit-by-bit forensic image and work only on the copy.
-2. **Verify Integrity:** Generate a cryptographic hash (SHA-256) immediately after acquisition.
-3. **Document Everything:** If it isn't documented, it didn't happen. Every transfer of evidence must be signed and dated.
-4. **Secure Storage:** Evidence must be stored in a tamper-evident bag or a locked, access-controlled environment.
+The Chain of Custody is a legal safeguard. If the chain is broken, or a gap is found in the timeline, the evidence is considered "spoiled" and will likely be dismissed in court or during administrative hearings.
 
-**🛠️ Technical Verification (On Ubuntu)**
-To maintain the "Digital Chain of Custody," you must verify that the evidence file has not changed over time.
+---
 
-1. **Create the Initial Hash:** Run this as soon as the acquisition (RAM or Disk) is finished.
+## 🛡️ The Golden Rules of Forensic Custody
+
+### **1. The Principle of Integrity**
+* **Never Work on Original Media:** Always create a bit-by-bit forensic image (`.E01` or `.raw`) and work only on the copy.
+* **Verify Integrity:** Generate a cryptographic hash (SHA-256) immediately after acquisition.
+
+### **2. Document the "Pre-Seizure" State**
+* **Photograph Everything:** Before touching a machine, photograph the screen (if on), the back (cables/ports), and all serial number stickers.
+* **Environment:** Note the room temperature, if the device was hot to the touch, and if any peripherals (USB sticks, Mouse Jigglers) were connected.
+
+### **3. Physical Security**
+* **Tamper-Evident Bags:** Once seized, items must go into an anti-static, tamper-evident bag.
+* **Seal Numbers:** Every bag has a unique serial number. If you open the bag for imaging, you must record the **old seal number** being broken and the **new seal number** applied.
+
+
+
+---
+
+## 🛠️ Technical Verification (Ubuntu Commands)
+
+**1. Create the Master Hash:**
+Run this immediately after the acquisition (RAM or Disk) is finished.
 ```bash
+# Generate SHA-256 for the evidence file
 sha256sum evidence_dump.raw > evidence_dump.raw.sha256
 ```
-2. **Verify the Hash Before Every Analysis Session:** Before you open the file in Autopsy or Volatility, verify its integrity.
+
+**2. Verify the Chain (Digital):**
+Run this before every analysis session to prove the file hasn't changed by a single bit.
 ```bash
 sha256sum -c evidence_dump.raw.sha256
 ```
-If the output is `OK`, the evidence is intact. If it fails, the evidence is "contaminated" and no longer reliable.
 
 ---
 
-## 📝 Chain of Custody Template
-Copy and use this template for every item seized.
+## 📝 Universal Evidence Template
+Create a new copy of this section for every item seized (Item-001, Item-002, etc).
 
-***Case Information:***
+**Section A:** Item Identification
+* **Case ID:** `[e.g., 2026-NY-001]`
+* **Item ID:** `ITEM-_______`
+* **Description:** `[e.g., 2TB Western Digital HDD / Serial: XYZ123]`
+* **Tamper Seal #:** `[Initial Seal Number]`
+* **Witnesses:** `[List any persons present during seizure]`
 
-* **Case ID:** ____________________
-* **Investigator:** ____________________
-* **Location of Seizure:** ____________________
+**Section B: Acquisition Details**
+* **Date/Time of Seizure:** `YYYY-MM-DD HH:MM`
+* **System Status:** `[Powered ON / Powered OFF / Sleep / Damaged]`
+* **Capture Tool Used:** `[e.g., Guymager v0.8.12]`
+* **Final Acquisition Hash (SHA-256):** `[Paste the 64-character hash here]`
 
-Evidence Description:
+**Section C: Evidence Tracking Log**
+This table tracks the Physical movement and Digital access.
+### **Section C: Evidence Tracking Log**
 
-* **Item ID:** ITEM-001
-* **Description:** (e.g., 500GB Samsung SSD, Serial Number: XYZ123)
-* **Status:** (Powered ON / Powered OFF / Locked)
-* **Acquisition Hash (SHA-256):** `[Insert Hash Here]`
-
-### **Evidence Tracking Log**
-
-| Date & Time | Handled By | Action Taken | Location | Signature/ID |
-| :--- | :--- | :--- | :--- | :--- |
-| 2026-01-09 10:00 | [Name] | Evidence seized and hashed | [Site Location] | [Initials] |
-| 2026-01-09 12:30 | [Name] | Locked in Evidence Safe #1 | Forensics Lab | [Initials] |
-| 2026-01-10 09:00 | [Name] | Removed for forensic imaging | Workstation 01 | [Initials] |
-| 2026-01-10 17:00 | [Name] | Returned to Evidence Safe #1 | Forensics Lab | [Initials] |
+| Date & Time (ISO) | Handled By | Action Performed | Current Location | Hash Verified? |
+| :--- | :--- | :--- | :--- | :---: |
+| 2026-01-09 10:00 | [Name] | Evidence seized, bagged, and hashed | [Site Address] | N/A |
+| 2026-01-09 13:00 | [Name] | Transported to Lab; Placed in Safe #1 | [Forensics Lab] | YES |
+| 2026-01-10 09:00 | [Analyst] | Removed for forensic imaging | [Workstation 01] | YES |
+| 2026-01-10 17:00 | [Analyst] | Imaging finished; Returned to Safe #1 | [Forensics Lab] | YES |
+| 2026-01-11 10:00 | [Analyst] | Bag opened for physical inspection | [Workstation 01] | N/A |
 
 ---
-## ⚠️ Common Pitfalls
 
-* **Broken Links:** If there is a gap in the timeline (e.g., evidence was out of the safe for 48 hours without a name attached), the evidence is often dismissed.
-
-* **Write-Protection:** Connecting a disk to a Windows machine without a hardware Write Blocker will update the "Last Accessed" timestamps on the files, destroying the original metadata. Always use a write blocker!
+⚠️ Common Pitfalls & Defense Challenges
+* **The "Admin" Mistake:** Never log in to a suspect's Windows/Linux account to "just check a file." This changes thousands of registry keys and timestamps. **Capture first**, analyze the copy later.
+* **Broken Timeline:** If a device is moved and there is no entry for the person who transported it, the "Chain" is broken.
+* **Write-Protection:** Connecting a disk to a Windows machine without a hardware Write Blocker will update the "Last Accessed" timestamps on the files. This is enough to get evidence thrown out of court.
+* **File Permissions:** Always set your evidence files to **Read-Only** on your workstation to prevent accidental modification:
+```bash
+chmod 444 evidence_dump.raw
+```
