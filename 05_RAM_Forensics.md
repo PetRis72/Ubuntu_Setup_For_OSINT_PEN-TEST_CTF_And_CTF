@@ -87,10 +87,11 @@ To maintain the "Digital Chain of Custody," you must verify that the evidence fi
 1. **Create the Initial Hash:** Run this as soon as the acquisition (RAM or Disk) is finished.
 ```bash
 sha256sum evidence_dump.raw > evidence_dump.raw.sha256
-
+```
 2. **Verify the Hash Before Every Analysis Session:** Before you open the file in Autopsy or Volatility, verify its integrity.
 ```bash
-sha256sum -c evidence_dump.raw.sha256 
+sha256sum -c evidence_dump.raw.sha256
+```
 If the output is `OK`, the evidence is intact. If it fails, the evidence is "contaminated" and no longer reliable.
 
 ---
