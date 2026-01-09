@@ -63,3 +63,9 @@ su - "$TARGET_USER" -c 'echo "alias bat=batcat" >> ~/.zshrc'
 chsh -s /usr/bin/zsh "$TARGET_USER"
 
 printf '\nSetup complete. Please reboot or log out and back in for changes to take effect.\n'
+
+# --- NEW SECTION: Evidence Gathering & Forensics ---
+# Autopsy: Graphical interface for Sleuth Kit
+# Guymager: Media acquisition/imaging (GUI-based)
+# Hashdeep: For calculating hashes (MD5/SHA256) of entire directories
+apt install -y autopsy guymager hashdeep sleuthkit
