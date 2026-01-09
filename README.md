@@ -1,6 +1,6 @@
 # Ubuntu Hardening & Security Toolkit
 
-This script automates the process of hardening a fresh Ubuntu installation and transforming it into a powerful workstation for OSINT, penetration testing, and CTF competitions (like PicoCTF, TryHackMe, and HackTheBox).
+This script automates the process of hardening a fresh Ubuntu installation and transforming it into a powerful workstation for OSINT, penetration testing, Digital Forensics, and CTF competitions (like PicoCTF, TryHackMe, and HackTheBox).
 
 It streamlines system security, installs essential industry tools, and configures a professional terminal environment.
 
@@ -14,14 +14,14 @@ It streamlines system security, installs essential industry tools, and configure
 * **Proactive Defense:** Installs and enables `fail2ban`, `ClamAV` (antivirus), `rkhunter`, `chkrootkit`, and `AIDE` (File Integrity Monitoring).
 * **Auditing:** Installs `Lynis` for comprehensive system security auditing.
 
-### 2. Security & OSINT Toolkit
+### 2. Specialized Toolkits
 A wide array of tools are installed, categorized by use case:
-* **Network Analysis:** `nmap`, `wireshark`, `tcpdump`, `net-tools`.
-* **Web & DB Hacking:** `sqlmap`, `gobuster`, `nikto`.
-* **Exploitation & Cracking:** `metasploit-framework`, `john`, `hashcat`, `hydra`.
+
+* **Digital Forensics & Evidence Gathering:** `autopsy`, `guymager`, `sleuthkit`, `hashdeep`, `binwalk`, `steghide`, `exiftool`.
 * **Advanced OSINT & Recon:** `theharvester`, `recon-ng`, `sublist3r`, `maltego`, `sherlock`, `amass`, `spiderfoot`.
-* **Vulnerability Scanning:** `trivy`.
-* **CTF & Reverse Engineering:** `binwalk`, `steghide`, `exiftool`, `pwntools`, `gdb`, `ghidra`, `radare2`.
+* **Network Analysis:** `nmap`, `wireshark`, `tcpdump`, `net-tools`, `dnsutils`.
+* **Exploitation & Cracking:** `metasploit-framework`, `sqlmap`, `gobuster`, `nikto`, `john`, `hashcat`, `hydra`.
+* **CTF & Reverse Engineering:** `pwntools`, `gdb`, `ghidra`, `radare2`, `trivy`.
 * **Privacy & Anonymity:** `tor`, `proxychains4`.
 
 ### 3. Terminal & Quality of Life
@@ -49,6 +49,15 @@ A wide array of tools are installed, categorized by use case:
    sudo ./SetUp_ubuntu.sh
 
 6. ***Finalize:*** Reboot your system or log out and back in for the shell changes and group permissions to take effect.
+
+---
+
+## 📋 Documentation
+For specific guides on how to use the tools, see the following files:
+* [Terminal & QoL Guide](./01_QoL_Guide.md)
+* [CTF Quick Start Guide](./02_CTF_HowTo.md)
+* [OSINT Quick Start Guide](./03_OSINT_HowTo.md)
+* [Evidence Gathering & Forensics](./04_Evidence_Gathering.md)
 
 ---
 
