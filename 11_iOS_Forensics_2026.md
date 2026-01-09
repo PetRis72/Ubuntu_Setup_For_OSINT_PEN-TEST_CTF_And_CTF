@@ -40,7 +40,7 @@ The `checkm8` exploit still works on older hardware (iPhone X and older) regardl
 * **Magnet GrayKey / VeraKey:** The primary tools for bypassing passcodes on modern iPhone 15/16/17+ running iOS 26.
 * **Cellebrite UFED:** Essential for decoding encrypted app data (Signal, WhatsApp, Telegram).
 
-##📝 iOS Seizure Checklist
+## 📝 iOS Seizure Checklist
 
 * [ ] **Physical Check:** Look for "Sticky Notes" with passcodes or FaceID bypass patterns.
 * [ ] **Biometric Status:** If the user is present, document if FaceID/TouchID is enabled (legal requirements vary).
@@ -49,7 +49,7 @@ The `checkm8` exploit still works on older hardware (iPhone X and older) regardl
 
 ---
 
-##🧪 Technical Verification: Lockdown Certificates
+## 🧪 Technical Verification: Lockdown Certificates
 If you can pair the iPhone with a "Trusted" computer (e.g., the suspect's laptop), you can extract a **Lockdown Certificate**.
 
 * **Action:** Copy the `.plist` files from `/var/db/lockdown/` (on macOS) or `C:\ProgramData\Apple\Lockdown` (on Windows).
