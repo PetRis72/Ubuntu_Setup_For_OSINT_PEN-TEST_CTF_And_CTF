@@ -55,10 +55,10 @@ The 2026 update introduces **Zero-Trust Evidence Handling**, **Cloud Forensics**
 
 This repo includes 2026-standard documentation for professional investigations:
 
-* [Quality Of Life](./01_QoL_Guide.md)
+* [✨ Quality Of Life](./01_QoL_Guide.md)
 * [🚩 CTF Quick Start](./02_CTF_HowTo.md)
-* [🔍 OSINT Quick Start](./03_OSINT_HowTo.md)
-* [Evidence Gathering](./04_Evidence_Gathering.md)
+* [🔎 OSINT Quick Start](./03_OSINT_HowTo.md)
+* [🔍Evidence Gathering](./04_Evidence_Gathering.md)
 * [🧠 RAM Acquisition & Analysis](./05_RAM_Forensics.md) – Volatile memory workflows.
 * [📁 Hard Drive Forensics (TB+ Scale)](./06_Hard_Drive_Forensics.md) – Mastering large drive imaging.
 * [🚀 Autopsy Optimization](./07_Autopsy_Optimization.md) – Handling Big Data analysis.
