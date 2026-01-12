@@ -87,6 +87,9 @@ target = process('./vuln_binary')
 target.sendline(b'A' * 32 + p64(0xdeadbeef))
 target.interactive()
 ```
+
+---
+
 ## 🌐 Connectivity & Stealth
 
 ### **Proxychains4**
@@ -96,6 +99,8 @@ target.interactive()
 **Tor**
 *Anonymity network.*
 **Start service:** `sudo systemctl start tor`
+
+---
 
 ## 📝 Evidence Documentation
 
@@ -109,4 +114,4 @@ target.interactive()
 * **Launch:** `obs`
 * **Setup:** Create a "Screen Capture" source to document your forensic process.
 
-  
+---
