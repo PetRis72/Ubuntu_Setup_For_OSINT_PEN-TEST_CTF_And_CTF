@@ -30,7 +30,17 @@ The 2026 update introduces **Universal Hardware Optimization**, **Cloud Forensic
 ### 4. Documentation & Evidence Discovery
 * **OBS Studio:** Configured for high-fidelity screen recording of forensic workflows (Digital Witnessing).
 * **CherryTree:** A hierarchical note-taking application used for case logging, image embedding, and evidence documentation.
-  
+
+### 5. Static Malware Analysis (REMnux-Lite)
+* **YARA:** The pattern matching swiss-army knife for malware researchers.
+* **Oletools:** Python tools to analyze Microsoft OLE2 files (MS Office) for malicious macros.
+* **UPX:** Advanced executable packer/unpacker.
+
+### 6. Network Exploitation & Lateral Movement
+* **Impacket:** A collection of Python classes for working with network protocols (SMB, WMI, Kerberos).
+* **Evil-WinRM:** The ultimate WinRM shell for hacking Windows boxes.
+* **Dirsearch:** Advanced web path brute-forcing tool.
+
 ---
 
 ## 🚀 Installation & Usage
