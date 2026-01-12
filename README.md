@@ -1,8 +1,8 @@
 # 🛡️ Ubuntu Hardening & 2026 Forensic Toolkit
 
-This repository contains a professional-grade automation script and documentation suite to transform a fresh Ubuntu installation into a high-performance workstation for **Digital Forensics (DFIR)**, **Incident Response**, **OSINT**, and **Advanced CTF** competitions.
+This repository contains a professional-grade, **hardware-aware** automation script and documentation suite to transform any fresh Ubuntu installation into a high-performance workstation for **Digital Forensics (DFIR)**, **Incident Response**, **OSINT**, and **Advanced CTF** competitions.
 
-The 2026 update introduces **Zero-Trust Evidence Handling**, **Cloud Forensics**, and **Live Triage** capabilities.
+The 2026 update introduces **Universal Hardware Optimization**, **Cloud Forensics**, and **Isolated Python Environments**.
 
 ---
 
@@ -11,18 +11,20 @@ The 2026 update introduces **Zero-Trust Evidence Handling**, **Cloud Forensics**
 ### 1. System Hardening & "Zero-Trust" Security
 * **Proactive Defense:** Installs `UFW`, `fail2ban`, `ClamAV`, `rkhunter`, and `chkrootkit`.
 * **Integrity Monitoring:** Configures `AIDE` and `Lynis` for continuous security auditing.
-* **Network Isolation:** Hardens the system for forensic integrity, preventing accidental data exfiltration.
+* **Non-Interactive Setup:** Hardened configurations applied automatically without user prompts for seamless deployment.
 
 ### 2. Specialized Toolkits (2026 Ready)
-* **Digital Forensics (Deep Dive):** `Autopsy`, `Guymager`, `SleuthKit`, `Volatility3`, `ewf-tools` (.E01 support), and `Bulk-Extractor`.
+* **Digital Forensics (Deep Dive):** `SleuthKit`, `Volatility3`, `ewf-tools` (.E01 support), `Guymager`, and `Bulk-Extractor`.
 * **Incident Response & Live Triage:** `Velociraptor` (endpoint hunting) and `UAC` (Unix Artifacts Collector) for rapid 15-minute triage.
 * **Data Recovery & Carving:** `Foremost`, `Scalpel`, `TestDisk`, and `PhotoRec`.
-* **Cloud Forensics:** `rclone` for forensic-grade imaging of AWS, Google Drive, and OneDrive.
-* **Advanced OSINT:** `Sherlock`, `Amass`, `Spiderfoot`, `theHarvester`, and `Maltego`.
-* **Reverse Engineering & CTF:** `Ghidra`, `Radare2`, `Binwalk`, `ExifTool`, `PwnTools`, and `Trivy`.
+* **Pentesting & Recon:** `Gobuster`, `John the Ripper`, `Hydra`, `SQLMap`, and `Nikto`.
+* **Advanced OSINT:** `Sherlock`, `Amass`, `Spiderfoot`, and `theHarvester`.
+* **Reverse Engineering:** `Radare2`, `Binwalk`, `ExifTool`, and `PwnTools`. (Includes OpenJDK 17 for `Ghidra` support).
 
-### 3. Professional Terminal Environment
-* **Zsh & Kali Theme:** Automatically configures **Oh My Zsh** with the Kali Linux theme for a seamless transition between tools.
+### 3. Professional Terminal & Python Environment
+* **Universal Hardware Awareness:** Automatically detects CPU cores to optimize tool compilation speed.
+* **Pyenv Integration:** Installs and configures an isolated **Python 3.12.1** environment, preventing "externally-managed-environment" conflicts on Ubuntu 24.04+.
+* **Zsh & Kali Theme:** Automatically configures **Oh My Zsh** with the Kali Linux theme for a seamless transition between security tools.
 * **QoL Tools:** `bat` (syntax highlighting), `btop` (resource monitoring), `tldr` (simplified man pages), and `fzf` (fuzzy finder).
 
 ---
@@ -71,8 +73,9 @@ This repo includes 2026-standard documentation for professional investigations:
 ## 📋 Requirements
 
 * **OS:** Ubuntu 24.04 LTS (Recommended) or 22.04 LTS.
-* **User:** Sudo privileges required
-* **Disk:** At least 100GB (SSD recommended for forensics).
+* **Architecture:** Universal (x86_64 / ARM64).
+* **User:** Sudo privileges required.
+* **Hardware:** Minimum 8GB RAM (16GB+ recommended for RAM forensics and virtualization).
 
 ## ⚖️ Disclaimer
 
