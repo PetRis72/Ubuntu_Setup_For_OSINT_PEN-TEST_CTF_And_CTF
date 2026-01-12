@@ -27,6 +27,10 @@ The 2026 update introduces **Universal Hardware Optimization**, **Cloud Forensic
 * **Zsh & Kali Theme:** Automatically configures **Oh My Zsh** with the Kali Linux theme for a seamless transition between security tools.
 * **QoL Tools:** `bat` (syntax highlighting), `btop` (resource monitoring), `tldr` (simplified man pages), and `fzf` (fuzzy finder).
 
+### 4. Documentation & Evidence Discovery
+* **OBS Studio:** Configured for high-fidelity screen recording of forensic workflows (Digital Witnessing).
+* **CherryTree:** A hierarchical note-taking application used for case logging, image embedding, and evidence documentation.
+  
 ---
 
 ## 🚀 Installation & Usage
