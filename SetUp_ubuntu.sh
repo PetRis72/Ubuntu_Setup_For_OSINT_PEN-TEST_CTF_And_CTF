@@ -67,6 +67,20 @@ add-apt-repository -y ppa:obsproject/obs-studio
 apt update
 apt install -y obs-studio
 
+# --- MALWARE ANALYSIS (REMnux Favorites) ---
+echo "--- Installerer Malware-analyse verktøy ---"
+apt install -y yara upx-ucl oletools forensics-all
+
+# --- PENTESTING & LATERAL MOVEMENT (Kali Favorites) ---
+echo "--- Installerer Nettverks-pentesting verktøy ---"
+apt install -y impacket-scripts evil-winrm dirsearch bloodhound.py
+
+# --- DOKUMENTASJON & BEVIS (OBS & CHERRYTREE) ---
+echo "--- Installerer OBS og CherryTree ---"
+add-apt-repository -y ppa:obsproject/obs-studio
+apt update
+apt install -y obs-studio cherrytree
+
 # CherryTree for strukturert sakslogg
 apt install -y cherrytree
 
