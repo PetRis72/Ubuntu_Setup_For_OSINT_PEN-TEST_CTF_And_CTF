@@ -1,6 +1,6 @@
-# 🚩 CTF Tool Quick Start Guide
+# 🚩 CTF & Forensic Tool Quick Start Guide (2026 Edition)
 
-This guide provides basic usage examples for the forensic, reverse engineering, and exploitation tools included in this setup.
+This guide provides rapid-fire examples for the forensic, reverse engineering, and exploitation tools included in this environment.
 
 ---
 
@@ -16,9 +16,26 @@ This guide provides basic usage examples for the forensic, reverse engineering, 
 * **Scan for embedded files:** `binwalk challenge.bin`
 * **Extract all files automatically:** `binwalk -e challenge.bin`
 
-### **Steghide**
-*Hide or extract data from images and audio files.*
-* **Extract hidden data:** `steghide extract -sf image.jpg`
+### **Oletools** (New!)
+*Analyze malicious Office documents (macros, etc.).*
+* **Scan document for macros:** `olevba document.docm`
+* **Extract metadata from OLE files:** `olemeta document.doc`
+
+### **Bulk-Extractor** (New!)
+*Fast extraction of emails, URLs, and PCAP data from disk images.*
+* **Extract all features:** `bulk_extractor -o output_dir image.E01`
+
+---
+
+## 🛡️ Live Triage & Incident Response
+
+### **UAC (Unix Artifacts Collector)**
+*Triage tool for live Linux systems.*
+* **Collect standard artifacts:** `sudo /opt/uac/uac -p ir_triage ./output_folder`
+
+### **Velociraptor**
+*Endpoint hunting and real-time triage.*
+* **Start local GUI:** `sudo velociraptor gui`
 
 ---
 
@@ -27,21 +44,34 @@ This guide provides basic usage examples for the forensic, reverse engineering, 
 ### **GDB (GNU Debugger)**
 *Interactive debugger for binary analysis.*
 * **Start debugging:** `gdb ./binary`
-* **Useful internal commands:**
-  * `info functions` - List all functions.
-  * `disas main` - Disassemble the main function.
-  * `run` - Start the program.
+* **Commands:** `info functions`, `disas main`, `run`
 
 ### **Radare2**
-*Command-line hex editor and reverse engineering framework.*
-* **Analyze binary:** `r2 ./binary` -> then type `aaa` to analyze all.
-* **List functions:** `afl`
-* **Enter visual mode:** `V` (use `p` to cycle through views).
+*Command-line hex editor and RE framework.*
+* **Analyze & List:** `r2 ./binary` -> `aaa` (analyze) -> `afl` (list functions).
+* **Visual Mode:** Press `V` then `p` to cycle views.
 
 ### **Ghidra**
-*Graphical decompiler and SRE suite.*
+*Graphical decompiler suite.*
 * **Launch:** `ghidra`
-* **Usage:** Create a project, import binary, and use the **Decompiler** window to see C-style code.
+* **Tip:** Always use the "Decompiler" window to read C-style logic from assembly.
+
+---
+
+## 🕸️ Web & Network Pentesting
+
+### **Gobuster** (New!)
+*Brute-force URLs, DNS, and VHosts.*
+* **Directory scan:** `gobuster dir -u http://target.com -w /usr/share/wordlists/dirb/common.txt`
+
+### **Impacket** (New!)
+*Network protocol manipulation (SMB/WMI/Kerberos).*
+* **Dump hashes via SMB:** `impacket-secretsdump -system SYSTEM -sam SAM LOCAL`
+* **Get a shell via WMI:** `impacket-wmiexec DOMAIN/User@TargetIP`
+
+### **Dirsearch** (New!)
+*Advanced web path brute-forcing.*
+* **Quick scan:** `dirsearch -u http://target.com`
 
 ---
 
@@ -49,39 +79,34 @@ This guide provides basic usage examples for the forensic, reverse engineering, 
 
 ### **Pwntools**
 *Python library for crafting exploits.*
-* **Example exploit script (`exploit.py`):**
+* **Template script (`exploit.py`):**
 ```python
 from pwn import *
-
-# Connect to a local process
 target = process('./vuln_binary')
-
-# Or connect to a remote server
-# target = remote('127.0.0.1', 1337)
-
-# Send payload
+# target = remote('ip', port)
 target.sendline(b'A' * 32 + p64(0xdeadbeef))
-
-# Drop to interactive shell
 target.interactive()
 ```
+## 🌐 Connectivity & Stealth
 
-## 🛡 Vulnerability Research
-**Trivy**
-Scan filesystems or images for CVEs.
-* **Scan current directory:** `trivy fs`
-* **Scan for misconfigurations:** `trivy config`
+### **Proxychains4**
+*Force connections through Tor or SOCKS proxies.*
+* **Usage:** `proxychains4 nmap -sT -Pn <IP>`
 
----
+**Tor**
+*Anonymity network.*
+**Start service:** `sudo systemctl start tor`
 
-## 🌐 Networking
+## 📝 Evidence Documentation
 
-**Netcat (nc)**
-The "Swiss Army Knife" of networking.
-* **Listen for a shell:** `nc -lvnp 4444`
-* **Connect to a server:** `nc <IP> <PORT>`
+## **CherryTree**
+*Hierarchical note-taking for case logs.*
+* **Launch:** `cherrytree`
+* **Tip:** Use "Code Nodes" to store suspicious scripts with syntax highlighting.
 
-**Proxychains4**
-Force any TCP connection through a proxy (e.g., Tor).
-* **Usage with Nmap:** `proxychains4 nmap -sT -PN <IP>`
+## **OBS Studio**
+*Screen recording for "Digital Witnessing".*
+* **Launch:** `obs`
+* **Setup:** Create a "Screen Capture" source to document your forensic process.
 
+  
