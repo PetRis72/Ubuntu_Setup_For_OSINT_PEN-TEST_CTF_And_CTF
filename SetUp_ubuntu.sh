@@ -60,6 +60,16 @@ apt install -y nmap wireshark tshark net-tools dnsutils whois \
                gobuster john hydra sqlmap nikto \
                spiderfoot amass tor proxychains4
 
+# --- DOCUMENTATION & EVIDENCE DISCOVERY ---
+echo "--- Installerer OBS Studio og CherryTree for dokumentasjon ---"
+# OBS Studio for skjermopptak av bevis
+add-apt-repository -y ppa:obsproject/obs-studio
+apt update
+apt install -y obs-studio
+
+# CherryTree for strukturert sakslogg
+apt install -y cherrytree
+
 # --- DIGITAL FORENSICS (DFIR) ---
 apt install -y ewf-tools sleuthkit hashdeep testdisk foremost scalpel \
                binwalk exiftool rclone volatility3 guymager bulk-extractor
