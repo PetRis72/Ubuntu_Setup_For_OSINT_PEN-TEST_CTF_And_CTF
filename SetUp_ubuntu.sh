@@ -1,93 +1,118 @@
 #!/bin/bash
 
-# Script to harden Ubuntu, install OSINT and security tools, and
-# configure the terminal for 2026-standard Digital Forensics & IR.
-# Run this script as root.
+# =================================================================
+# UNIVERSAL DFIR, OSINT & SEC WORKSTATION SETUP
+# Fungerer på Ubuntu 24.04+ (Laptop, Desktop, VM)
+# =================================================================
 
 set -e
+export DEBIAN_FRONTEND=noninteractive
 
 if [[ $EUID -ne 0 ]]; then
-  echo "This script must be run as root." >&2
+  echo "Dette skriptet må kjøres som root (sudo)." >&2
   exit 1
 fi
 
 TARGET_USER="${SUDO_USER:-$USER}"
 USER_HOME=$(eval echo ~"$TARGET_USER")
+# Oppdager antall CPU-kjerner for å maksimere hastighet på kompilering
+CPU_CORES=$(nproc)
 
-# --- SYSTEM UPDATE ---
+echo "--- 🚀 Starter installasjon på $(hostname) for $TARGET_USER ---"
+echo "--- Bruker $CPU_CORES kjerner for optimalisering ---"
+
+# --- SYSTEM OPPDATERING & DEPOTER ---
+add-apt-repository -y universe
+add-apt-repository -y multiverse
 apt update && apt upgrade -y
 
-# --- SECURITY & HARDENING ---
-# Added: ufw, fail2ban, clamav, rkhunter, chkrootkit, lynis, aide
-apt install -y ufw fail2ban clamav clamav-daemon rkhunter chkrootkit lynis aide
+# --- AUTOMATISERING ---
+echo "wireshark-common wireshark-common/install-setuid boolean true" | debconf-set-selections
 
-# Configure firewall
+# --- BASISVERKTØY & BYGG-AVHENGIGHETER ---
+apt install -y build-essential libssl-dev zlib1g-dev libbz2-dev \
+libreadline-dev libsqlite3-dev curl libncursesw5-dev xz-utils tk-dev \
+libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev git wget openjdk-17-jdk \
+apt-transport-https ca-certificates software-properties-common
+
+# --- UNIVERSAL PYTHON SETUP (via pyenv) ---
+echo "--- Installerer pyenv og kompilerer Python (Justerer hastighet etter maskinvare) ---"
+if [ ! -d "$USER_HOME/.pyenv" ]; then
+    su - "$TARGET_USER" -c 'curl https://pyenv.run | bash'
+fi
+
+export PYENV_ROOT="$USER_HOME/.pyenv"
+export PATH="$PYENV_ROOT/bin:$PATH"
+
+# Her bruker vi MAKEOPTS for å bruke alle tilgjengelige CPU-kjerner uansett maskin
+su - "$TARGET_USER" -c "export MAKEOPTS='-j$CPU_CORES'; export PATH=\"\$HOME/.pyenv/bin:\$PATH\"; eval \"\$(pyenv init -)\"; pyenv install 3.12.1 -s"
+su - "$TARGET_USER" -c "export PATH=\"\$HOME/.pyenv/bin:\$PATH\"; eval \"\$(pyenv init -)\"; pyenv global 3.12.1"
+
+# --- SECURITY & HARDENING ---
+apt install -y ufw fail2ban clamav rkhunter chkrootkit lynis aide
 ufw default deny incoming
 ufw default allow outgoing
 ufw --force enable
-
-# Enable fail2ban and update AV databases
 systemctl enable --now fail2ban
-freshclam || true
-rkhunter --update || true
 
-# --- OSINT & PENETRATION TESTING ---
-# Added: sherlock, amass, spiderfoot, proxychains4, tor + standard tools
-apt install -y \
-  nmap wireshark net-tools dnsutils whois \
-  git python3 python3-pip curl wget \
-  gobuster john hydra sqlmap nikto \
-  aircrack-ng hashcat metasploit-framework \
-  recon-ng theharvester sublist3r \
-  maltego snort suricata tcpdump \
-  sherlock amass spiderfoot proxychains4 tor
+# --- NETTVERK, OSINT & PENTESTING ---
+apt install -y nmap wireshark tshark net-tools dnsutils whois \
+               gobuster john hydra sqlmap nikto \
+               spiderfoot amass tor proxychains4
 
-# --- CTF & REVERSE ENGINEERING ---
-# Added: ghidra, radare2, trivy, binwalk, exiftool
-apt install -y \
-  binwalk steghide exiftool \
-  gdb gdb-multiarch qemu socat netcat-traditional \
-  python3-venv ghidra radare2 trivy
+# --- DIGITAL FORENSICS (DFIR) ---
+apt install -y ewf-tools sleuthkit hashdeep testdisk foremost scalpel \
+               binwalk exiftool rclone volatility3 guymager bulk-extractor
 
-# --- MODERN CLI TOOLS (Quality of Life) ---
-apt install -y bat htop btop tldr fzf
-
-su - "$TARGET_USER" -c 'pip3 install --user --upgrade pwntools'
-
-# --- TERMINAL CONFIGURATION (Kali Theme) ---
-apt install -y zsh fonts-powerline
-su - "$TARGET_USER" -c 'RUNZSH=no CHSH=no KEEP_ZSHRC=yes \
-  sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"'
-
-su - "$TARGET_USER" -c 'sed -i "s/^ZSH_THEME=.*/ZSH_THEME=\"kali\"/" ~/.zshrc'
-su - "$TARGET_USER" -c 'echo "alias bat=batcat" >> ~/.zshrc'
-chsh -s /usr/bin/zsh "$TARGET_USER"
-
-# --- 🧪 NEW: 2026 DIGITAL FORENSICS & INCIDENT RESPONSE ---
-# Core acquisition & analysis
-apt install -y autopsy guymager hashdeep sleuthkit volatility3
-
-# New 2026 additions:
-# 1. ewf-tools: Required for handling .E01 files (expert witness format)
-# 2. testdisk & photorec: The gold standard for recovering deleted partitions and files
-# 3. foremost & scalpel: Advanced file carving tools
-# 4. bulk-extractor: Extremely fast tool for extracting emails, URLs, and credit card numbers
-# 5. plaso: (log2timeline) The industry standard for creating forensic timelines
-# 6. rclone: For imaging and analyzing cloud storage (Dropbox, Google Drive, AWS)
-apt install -y ewf-tools testdisk foremost scalpel bulk-extractor rclone
-
-# Install UAC (Unix-like Artifacts Collector) - 2026 standard for triage
-# This tool automates the collection of forensic artifacts from a live system
+# --- TRIAGE & LIVE RESPONSE ---
 if [ ! -d "/opt/uac" ]; then
-    git clone https://github.com/tclahr/uac.git /opt/uac
+    git clone --depth 1 https://github.com/tclahr/uac.git /opt/uac
 fi
 
-# Install Velociraptor (The 2026 standard for endpoint hunting and triage)
-# It allows you to query a running system for specific artifacts instantly.
-V_VER="0.72" # Standard 2026 stable version
-wget -O /usr/local/bin/velociraptor https://github.com/Velocidex/velociraptor/releases/download/v${V_VER}/velociraptor-v${V_VER}-linux-amd64
+V_VER="0.72"
+wget -q -O /usr/local/bin/velociraptor https://github.com/Velocidex/velociraptor/releases/download/v${V_VER}/velociraptor-v${V_VER}-linux-amd64
 chmod +x /usr/local/bin/velociraptor
 
-printf '\n--- 2026 FORENSIC UPDATE COMPLETE ---\n'
-printf 'New Tools Added: E01 support, File Carving, Timeline Analysis, Cloud-Forensics, and Live Triage (UAC/Velociraptor).\n'
-printf 'Please reboot to finalize setup.\n'
+# --- TERMINAL SETUP (ZSH & Modern CLI Tools) ---
+apt install -y zsh fonts-powerline bat htop btop tldr fzf
+if [ ! -d "$USER_HOME/.oh-my-zsh" ]; then
+    su - "$TARGET_USER" -c 'git clone --depth 1 https://github.com/ohmyzsh/ohmyzsh.git ~/.oh-my-zsh'
+    su - "$TARGET_USER" -c 'cp ~/.oh-my-zsh/templates/zshrc.zsh-template ~/.zshrc'
+fi
+
+# Oppsett av miljøvariabler i .zshrc
+cat << EOF >> "$USER_HOME/.zshrc"
+# Python (pyenv)
+export PYENV_ROOT="\$HOME/.pyenv"
+[[ -d \$PYENV_ROOT/bin ]] && export PATH="\$PYENV_ROOT/bin:\$PATH"
+eval "\$(pyenv init -)"
+
+# Tools & Aliases
+alias bat=batcat
+alias ls='ls --color=auto'
+alias grep='grep --color=auto'
+EOF
+
+su - "$TARGET_USER" -c 'sed -i "s/^ZSH_THEME=.*/ZSH_THEME=\"kali\"/" ~/.zshrc'
+chsh -s /usr/bin/zsh "$TARGET_USER"
+
+# --- MANUAL INSTALLATION GUIDE ---
+clear
+echo "==============================================================="
+echo "📥 UNIVERSAL POST-INSTALL MANUAL"
+echo "==============================================================="
+echo "Systemet er ferdig satt opp med kjerne-verktøy."
+echo ""
+echo "For tunge GUI-verktøy, følg disse instruksjonene:"
+echo ""
+echo "1. GHIDRA: Last ned fra https://ghidra-sre.org/"
+echo "2. BURP SUITE: Last ned fra https://portswigger.net/"
+echo "3. METASPLOIT: Kjør 'curl https://raw.githubusercontent.com/rapid7/metasploit-omnibus/master/config/templates/metasploit-framework-wrappers/msfupdate.erb > msfinstall && chmod 755 msfinstall && ./msfinstall'"
+echo "==============================================================="
+
+read -p "Vil du åpne nedlastingssidene nå? (y/n): " choice
+if [[ "$choice" == "y" ]]; then
+    su - "$TARGET_USER" -c "xdg-open https://ghidra-sre.org/ && xdg-open https://portswigger.net/burp/communitydownload"
+fi
+
+echo "--- ✅ FERDIG! Logg ut og inn for å aktivere ZSH og Python-miljøet. ---"
