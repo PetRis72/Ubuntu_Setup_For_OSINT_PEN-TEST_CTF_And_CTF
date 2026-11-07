@@ -1,5 +1,24 @@
 # 🛡️ Ubuntu Security Workstation Setup
 
+## About This Project
+
+This Ubuntu setup was originally created to support my personal cybersecurity training on **picoCTF**, **Hack The Box (HTB)**, and other **Capture the Flag (CTF)** platforms.
+
+The goal is to build a practical, customizable Linux workstation for learning and practicing:
+
+- Capture the Flag challenges and cybersecurity labs
+- Ethical hacking and penetration testing
+- Open-Source Intelligence (OSINT)
+- Digital forensics and incident response (DFIR)
+- Reverse engineering and malware analysis
+- Linux administration, scripting, and security fundamentals
+
+Rather than installing a dedicated security distribution, this project provides a way to build a training environment on Ubuntu using selected tools and optional installation profiles.
+
+**Intended use:** Personal learning, authorized labs, CTF competitions, and security research in environments where testing is explicitly permitted.
+
+**Project status:** An evolving personal learning project. Tool availability and compatibility may vary by Ubuntu version, and installation should be tested in a virtual machine before use on a primary workstation.
+
 A configurable Bash installer for **Ubuntu 22.04 LTS and 24.04 LTS** aimed at OSINT, authorized penetration testing, CTF practice, digital forensics / incident response (DFIR), and static malware analysis.
 
 > **Status:** Version 2.0.0 is a reviewed rewrite, **not yet validated by end-to-end installation on every supported Ubuntu/architecture combination**. Package availability varies by Ubuntu release, architecture, and enabled APT repositories. Review the script before running it. Use a disposable VM and take a snapshot first.
