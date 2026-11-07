@@ -1,96 +1,154 @@
-# 🛡️ Ubuntu Hardening & 2026 Forensic Toolkit
+# 🛡️ Ubuntu Security Workstation Setup
 
-This repository contains a professional-grade, **hardware-aware** automation script and documentation suite to transform any fresh Ubuntu installation into a high-performance workstation for **Digital Forensics (DFIR)**, **Incident Response**, **OSINT**, and **Advanced CTF** competitions.
+A configurable Bash installer for **Ubuntu 22.04 LTS and 24.04 LTS** aimed at OSINT, authorized penetration testing, CTF practice, digital forensics / incident response (DFIR), and static malware analysis.
 
-The 2026 update introduces **Universal Hardware Optimization**, **Cloud Forensics**, and **Isolated Python Environments**.
+> **Status:** Version 2.0.0 is a reviewed rewrite, **not yet validated by end-to-end installation on every supported Ubuntu/architecture combination**. Package availability varies by Ubuntu release, architecture, and enabled APT repositories. Review the script before running it. Use a disposable VM and take a snapshot first.
 
----
+## What it does
 
-## 🛠️ Features
+- Installs common prerequisites and command-line utilities from your existing APT repositories.
+- Installs tool groups selected with `--profile` (`all` by default).
+- Optionally installs desktop tools, selected Python CLI tools through `pipx`, and UAC source code.
+- Optionally performs an APT upgrade, activates UFW, or changes the invoking user's login shell.
+- Checks whether each APT package is available and reports skipped or failed installations.
+- Logs actual runs to `/var/log/ubuntu-security-setup-<UTC timestamp>.log` (root-readable).
 
-### 1. System Hardening & "Zero-Trust" Security
-* **Proactive Defense:** Installs `UFW`, `fail2ban`, `ClamAV`, `rkhunter`, and `chkrootkit`.
-* **Integrity Monitoring:** Configures `AIDE` and `Lynis` for continuous security auditing.
-* **Non-Interactive Setup:** Hardened configurations applied automatically without user prompts for seamless deployment.
+**It does not** configure a complete hardened/zero-trust system, guarantee every package is available, install or configure Autopsy GUI, Velociraptor, Ghidra, Burp Suite or Metasploit, or make forensic procedures legally compliant by itself.
 
-### 2. Specialized Toolkits (2026 Ready)
-* **Digital Forensics (Deep Dive):** `SleuthKit`, `Volatility3`, `ewf-tools` (.E01 support), `Guymager`, and `Bulk-Extractor`.
-* **Incident Response & Live Triage:** `Velociraptor` (endpoint hunting) and `UAC` (Unix Artifacts Collector) for rapid 15-minute triage.
-* **Data Recovery & Carving:** `Foremost`, `Scalpel`, `TestDisk`, and `PhotoRec`.
-* **Pentesting & Recon:** `Gobuster`, `John the Ripper`, `Hydra`, `SQLMap`, and `Nikto`.
-* **Advanced OSINT:** `Sherlock`, `Amass`, `Spiderfoot`, and `theHarvester`.
-* **Reverse Engineering:** `Radare2`, `Binwalk`, `ExifTool`, and `PwnTools`. (Includes OpenJDK 17 for `Ghidra` support).
+## Requirements
 
-### 3. Professional Terminal & Python Environment
-* **Universal Hardware Awareness:** Automatically detects CPU cores to optimize tool compilation speed.
-* **Pyenv Integration:** Installs and configures an isolated **Python 3.12.1** environment, preventing "externally-managed-environment" conflicts on Ubuntu 24.04+.
-* **Zsh & Kali Theme:** Automatically configures **Oh My Zsh** with the Kali Linux theme for a seamless transition between security tools.
-* **QoL Tools:** `bat` (syntax highlighting), `btop` (resource monitoring), `tldr` (simplified man pages), and `fzf` (fuzzy finder).
+- Ubuntu **22.04** or **24.04** LTS (the script refuses other versions).
+- `amd64` or `arm64` architecture; package availability on ARM64 is **not guaranteed**.
+- A normal user account with `sudo` access. **Do not invoke from a direct root login.**
+- Network access to configured Ubuntu APT repositories. Optional `pipx` and GitHub installations need external network access.
+- A fresh VM or a backed-up workstation; sufficient storage and memory for the selected toolsets.
+- Existing APT repositories must provide the requested packages. The script does **not** add PPAs, `universe` or `multiverse` automatically.
 
-### 4. Documentation & Evidence Discovery
-* **OBS Studio:** Configured for high-fidelity screen recording of forensic workflows (Digital Witnessing).
-* **CherryTree:** A hierarchical note-taking application used for case logging, image embedding, and evidence documentation.
+## Installation
 
-### 5. Static Malware Analysis (REMnux-Lite)
-* **YARA:** The pattern matching swiss-army knife for malware researchers.
-* **Oletools:** Python tools to analyze Microsoft OLE2 files (MS Office) for malicious macros.
-* **UPX:** Advanced executable packer/unpacker.
+```bash
+git clone https://github.com/PetRis72/Ubuntu_Setup_For_OSINT_PEN-TEST_CTF_And_CTF.git
+cd Ubuntu_Setup_For_OSINT_PEN-TEST_CTF_And_CTF
+chmod +x SetUp_ubuntu.sh
 
-### 6. Network Exploitation & Lateral Movement
-* **Impacket:** A collection of Python classes for working with network protocols (SMB, WMI, Kerberos).
-* **Evil-WinRM:** The ultimate WinRM shell for hacking Windows boxes.
-* **Dirsearch:** Advanced web path brute-forcing tool.
+# Preview without making changes:
+sudo ./SetUp_ubuntu.sh --dry-run
 
----
+# Install command-line tools from all profiles:
+sudo ./SetUp_ubuntu.sh --profile all
+```
 
-## 🚀 Installation & Usage
+**Important:** The GitHub repository must contain this rewritten `SetUp_ubuntu.sh` before the above commands will run version 2.0.0. If reviewing files locally, run the script from the downloaded folder instead.
 
-**Warning:** This script is intended for use on a dedicated security VM or a fresh forensic workstation.
+## Profiles and packages
 
-1. **Clone the repository:**
-   ```bash
-   git clone [https://github.com/PetRis72/Ubuntu_Setup_For_OSINT_PEN-TEST_CTF_And_CTF.git](https://github.com/PetRis72/Ubuntu_Setup_For_OSINT_PEN-TEST_CTF_And_CTF.git)
-   cd Ubuntu_Setup_For_OSINT_PEN-TEST_CTF_And_CTF
-   ```
+All profiles install these shared prerequisites: `ca-certificates`, `curl`, `git`, `wget`, `gnupg`, `software-properties-common`, `python3`, `python3-venv`, `pipx`, `zsh`, `bat`, `btop`, `htop`, `fzf`, `tldr`, `fonts-powerline`.
 
-2. **Make the script executable:**
-   ```bash
-   chmod +x SetUp_ubuntu.sh
-   ```
+| Profile | Packages requested from APT |
+|---|---|
+| `core` | `ufw`, `fail2ban`, `clamav`, `clamav-freshclam`, `rkhunter`, `chkrootkit`, `lynis`, `aide` |
+| `osint` | `whois`, `dnsutils`, `amass`, `tor`, `proxychains4`, `exiftool` |
+| `pentest` | `nmap`, `tshark`, `wireshark`, `gobuster`, `john`, `hydra`, `sqlmap`, `nikto`, `net-tools` |
+| `ctf` | `binwalk`, `gdb`, `radare2`, `file`, `binutils` |
+| `dfir` | `ewf-tools`, `sleuthkit`, `hashdeep`, `testdisk`, `foremost`, `scalpel`, `bulk-extractor`, `exiftool`, `rclone`, `volatility3` |
+| `malware` | `yara`, `python3-oletools`, `upx` |
+| `all` | Every profile above |
 
-4. **Run as root/sudo:**
-   ```bash
-   sudo ./SetUp_ubuntu.sh
-   ```
+Packages are **attempted**, not guaranteed. If APT does not offer a package (for example, on a particular Ubuntu version), the script reports it as skipped. An APT install error is reported as a failure and causes a nonzero exit status at the end.
 
-6. ***Finalize:*** Reboot your system or log out and back in for the shell changes and group permissions to take effect.
+## Optional actions
 
----
+```bash
+# Only OSINT tools:
+sudo ./SetUp_ubuntu.sh --profile osint
 
-## 📋 Forensic Documentation & Guides
+# All command-line profiles plus desktop applications:
+sudo ./SetUp_ubuntu.sh --profile all --desktop
 
-This repo includes 2026-standard documentation for professional investigations:
+# Install optional Python CLIs via pipx (network required):
+sudo ./SetUp_ubuntu.sh --profile osint --python-tools
 
-* [✨ Quality Of Life](./01_QoL_Guide.md)
-* [🚩 CTF Quick Start](./02_CTF_HowTo.md)
-* [🔎 OSINT Quick Start](./03_OSINT_HowTo.md)
-* [🔍Evidence Gathering](./04_Evidence_Gathering.md)
-* [🧠 RAM Acquisition & Analysis](./05_RAM_Forensics.md) – Volatile memory workflows.
-* [📁 Hard Drive Forensics (TB+ Scale)](./06_Hard_Drive_Forensics.md) – Mastering large drive imaging.
-* [🚀 Autopsy Optimization](./07_Autopsy_Optimization.md) – Handling Big Data analysis.
-* [📊 Universal Chain of Custody](./08_Chain_of_Custody.md) – Legally defensible audit trails.
-* [📸 Seizure Photography Checklist](./09_Seizure_Photography_Checklist.md) – The "10-Shot" rule for scenes.
-* [🧳 Forensic Go-Bag 2026](./10_Forensic_Go_Bag_2026.md) – Essential hardware kit.
+# Also clone UAC source (not executed; upstream HEAD is not pinned):
+sudo ./SetUp_ubuntu.sh --profile dfir --uac
 
----
+# Upgrade existing system packages (opt-in):
+sudo ./SetUp_ubuntu.sh --profile core --upgrade
 
-## 📋 Requirements
+# Configure UFW (opt-in). Allow your actual SSH port before enabling:
+sudo ./SetUp_ubuntu.sh --profile core --enable-ufw --ssh-port 22
 
-* **OS:** Ubuntu 24.04 LTS (Recommended) or 22.04 LTS.
-* **Architecture:** Universal (x86_64 / ARM64).
-* **User:** Sudo privileges required.
-* **Hardware:** Minimum 8GB RAM (16GB+ recommended for RAM forensics and virtualization).
+# Install Oh My Zsh and change your login shell (opt-in):
+sudo ./SetUp_ubuntu.sh --profile core --change-shell
+```
 
-## ⚖️ Disclaimer
+`--python-tools` **attempts** to install `sherlock-project` and `theHarvester` through `pipx` under the invoking user's account. Package availability, CLI command names, and compatibility must be checked after installation; failed installations are reported. These tools are not installed unless the flag is provided.
 
-This toolkit is for authorized forensic investigations and ethical security testing only. The author assumes no liability for misuse. Using these tools against systems without explicit permission is illegal.
+`--desktop` attempts to install `obs-studio`, `cherrytree`, and `guymager` from APT. It does not install a desktop environment.
+
+`--uac` clones `https://github.com/tclahr/uac.git` to `/opt/uac` if the directory does not exist. It **does not** run UAC. Because the source is not pinned to a commit or verified against a release checksum, review it before use in an investigation.
+
+`--change-shell` clones Oh My Zsh if absent, creates `.zshrc` from its template if absent, and changes the invoking user's shell to `/usr/bin/zsh`. It does **not** install a Kali theme, autosuggestions, or syntax-highlighting plugins. It does not overwrite an existing `.zshrc`.
+
+## Security considerations
+
+- **UFW:** Disabled by default. `--enable-ufw` applies deny-incoming / allow-outgoing rules and activates UFW. If SSH is detected, the script requires `--ssh-port`. If you use SSH, VPN, remote management or other inbound services, review and allow **all** required ports first. Incorrect firewall rules can lock you out. Consider testing at a VM console.
+- **System services:** Installing packages such as `fail2ban`, `tor`, `clamav` or `wireshark` may have service, permission or package-configuration side effects. The script does not claim to fully configure them.
+- **Downloads:** The script uses APT packages, optionally `pipx` packages, and optionally clones GitHub repositories. Optional network sources are not cryptographically pinned in this version.
+- **Forensic integrity:** This workstation is not automatically a validated forensic acquisition environment. Use write-blocking, verified acquisition methods, case logs, and documented chain of custody where applicable.
+- **Legal scope:** Only investigate systems and data for which you have authorization. Legal rules differ by jurisdiction and investigation type.
+
+## Verify installation
+
+```bash
+command -v nmap
+command -v exiftool
+command -v ewfmount
+command -v yara
+command -v zsh
+
+# Check installed package status:
+dpkg-query -W nmap sleuthkit yara 2>/dev/null
+
+# See latest setup logs (requires sudo):
+sudo ls -lt /var/log/ubuntu-security-setup-*.log
+```
+
+Only expect commands from profiles and optional flags that you actually selected. Command names can differ from APT package names. A successful run does not guarantee that every requested tool was installed; read the skipped list and log. A nonzero exit status means at least one operation failed or a fatal check stopped execution.
+
+## Troubleshooting
+
+- **Package not found:** Check `apt-cache policy <package>` and the enabled Ubuntu repositories. Some packages may not be present for your release/architecture.
+- **Optional pipx failure:** Check `pipx list`, package naming, Python compatibility and network access. Retry the affected package separately.
+- **SSH / UFW:** Use console access to inspect `sudo ufw status verbose`; do not activate firewall remotely until you know all necessary rules.
+- **Disk space:** DFIR and CTF packages can use significant storage. Check `df -h` before installation.
+- **Dry run:** Prints intended commands but does not test APT installation, GitHub downloads or runtime compatibility.
+
+## Guides
+
+The following documents are **reference material**, not a guarantee that every tool or workflow is installed or supported by the script. Some legacy examples need separate technical validation, especially the Autopsy, E01, mobile forensics and legal sections.
+
+1. [Terminal & Quality of Life](./01_QoL_Guide.md)
+2. [CTF Quick Start](./02_CTF_HowTo.md)
+3. [OSINT Quick Start](./03_OSINT_HowTo.md)
+4. [Evidence Gathering](./04_Evidence_Gathering.md)
+5. [RAM Forensics](./05_RAM_Forensics.md)
+6. [Hard Drive Forensics](./06_Hard_Drive_Forensics.md)
+7. [Autopsy Optimization](./07_Autopsy_Optimization.md)
+8. [Chain of Custody](./08_Chain_of_Custody.md)
+9. [Seizure Photography Checklist](./09_Seizure_Photography_Checklist.md)
+10. [Forensic Go-Bag](./10_Forensic_Go_Bag_2026.md)
+11. [iOS Forensics](./11_iOS_Forensics_2026.md)
+12. [Android Forensics](./12_Android_Forensics_2026.md)
+13. [Final Case Report Template](./13_Final_Case_Report_Template.md)
+14. [European Forensic Standards](./14_European_Forensic_Standards_2026.md)
+15. [Discovery of Unrelated Crimes](./15_Discovery_of_Unrelated_Crimes.md)
+
+## Project status and limitations
+
+This version deliberately prioritizes conservative defaults and transparent installation reporting over claiming a turnkey forensic or zero-trust system. No automatic Velociraptor download is included because release/architecture selection and integrity verification should be implemented and tested first. Likewise, `pyenv` and a pinned Python 3.12.1 build have been removed in favor of system Python plus optional `pipx` installations.
+
+**Testing status:** Bash syntax validation has been performed on the rewritten script. End-to-end Ubuntu VM tests, ARM64 validation, APT package matrix tests, and optional network installation tests are still needed before describing it as production-ready.
+
+## Disclaimer
+
+For authorized security work, research, training and digital forensics only. Review commands and dependencies before running them, and comply with applicable law and organizational policy.
