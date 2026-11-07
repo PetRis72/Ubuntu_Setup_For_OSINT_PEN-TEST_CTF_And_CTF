@@ -64,6 +64,6 @@ To be compliant in 2026, add these steps to your investigation:
 ---
 
 ## 🔗 Regional Resources
-* **Norway:** [Politihøgskolen (NCFI Modules)](https://www.politihogskolen.no/en/)
+* **Norway:** [Politihøgskolen (NCFI Modules)](https://www.politihogskolen.no/english/research/ncfi/our-courses.html)
 * **EU:** [ENISA - European Union Agency for Cybersecurity](https://www.enisa.europa.eu/)
 * **Scandinavia:** [DFRWS EU (Digital Forensics Research Conference - Sweden 2026)](https://dfrws.org/)
