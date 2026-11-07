@@ -38,8 +38,6 @@ sudo ./SetUp_ubuntu.sh --dry-run
 sudo ./SetUp_ubuntu.sh --profile all
 ```
 
-**Important:** The GitHub repository must contain this rewritten `SetUp_ubuntu.sh` before the above commands will run version 2.0.0. If reviewing files locally, run the script from the downloaded folder instead.
-
 ## Profiles and packages
 
 All profiles install these shared prerequisites: `ca-certificates`, `curl`, `git`, `wget`, `gnupg`, `software-properties-common`, `python3`, `python3-venv`, `pipx`, `zsh`, `bat`, `btop`, `htop`, `fzf`, `tldr`, `fonts-powerline`.
